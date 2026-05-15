@@ -3,23 +3,24 @@ import os
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from handlers import router
+from aiogram.client.session.aiohttp import AiohttpSession
 
-load_dotenv()  # ← ОБЯЗАТЕЛЬНО
+load_dotenv()
 
 async def main():
     BOT_TOKEN = os.getenv("BOT_TOKEN")
-    if not BOT_TOKEN:
-        raise ValueError("BOT_TOKEN не найден в .env")
+
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher()
-    dp.include_router(router)
+    dp.include_router(router) 
 
     await dp.start_polling(
         bot,
         allowed_updates=[
             "message",
-            "business_message",          # ← без этого бизнес-сообщения не придут
-            "edited_business_message"    # если хочешь редактированные
+            "business_message",
+            "edited_business_message",
+            "deleted_business_messages"
         ]
     )
 
